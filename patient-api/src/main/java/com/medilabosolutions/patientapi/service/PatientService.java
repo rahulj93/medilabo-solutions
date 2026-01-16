@@ -28,6 +28,23 @@ public class PatientService {
         return patientRepository.save(patient);
     }
 
+    public Patient updatePatient(Long id, Patient updatedPatient) {
+        Patient existing = patientRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Patient not found"
+            ));
+
+        existing.setFirstName(updatedPatient.getFirstName());
+        existing.setLastName(updatedPatient.getLastName());
+        existing.setDateOfBirth(updatedPatient.getDateOfBirth());
+        existing.setGender(updatedPatient.getGender());
+        existing.setAddress(updatedPatient.getAddress());
+        existing.setPhone(updatedPatient.getPhone());
+
+        return patientRepository.save(existing);
+    }
+
     // public Patient updatePatient(String lastName, String firstName) {
     //     return patientRepository.updatePatient(lastName, firstName);
     // }

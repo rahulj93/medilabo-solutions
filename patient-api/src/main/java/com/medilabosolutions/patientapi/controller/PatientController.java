@@ -1,7 +1,9 @@
 package com.medilabosolutions.patientapi.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,6 +33,14 @@ public class PatientController {
     @PostMapping("/patient")
     public Patient createPatient(@RequestBody Patient patient) {
         return patientService.createPatient(patient);
+    }
+
+    @PutMapping("/patient/{id}")
+    public Patient updatePatient(
+            @PathVariable Long id,
+            @RequestBody Patient patient
+    ) {
+        return patientService.updatePatient(id, patient);
     }
     // @PutMapping("/patient")
     // public Patient updatePatient(String lastName, String firstName) {
