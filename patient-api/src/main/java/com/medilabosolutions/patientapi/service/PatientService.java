@@ -24,6 +24,10 @@ public class PatientService {
         return patientRepository.findByFirstNameAndLastName(firstName, lastName).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient not found"));
     }
 
+    public Patient createPatient(Patient patient) {
+        return patientRepository.save(patient);
+    }
+
     // public Patient updatePatient(String lastName, String firstName) {
     //     return patientRepository.updatePatient(lastName, firstName);
     // }
