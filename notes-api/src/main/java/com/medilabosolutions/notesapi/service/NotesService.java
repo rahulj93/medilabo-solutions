@@ -16,9 +16,13 @@ public class NotesService {
         this.notesRepository = notesRepository; 
     }
 
-    // public Note getNoteByPatId(String patId) {
-    //     return notesRepository.findNoteByPatId(patId);
-    // }
+    public List<Note> getByPatId(String patId) {
+        return notesRepository.findByPatId(patId);
+    }
+
+    public List<Note> getByPatientName(String patient) {
+        return notesRepository.findByPatient(patient);
+    }
 
     public List<Note> findAll() {
         return notesRepository.findAll(); 
