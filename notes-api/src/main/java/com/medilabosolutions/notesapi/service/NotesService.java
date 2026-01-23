@@ -33,9 +33,16 @@ public class NotesService {
     }
 
     public Note update(String id, Note note) {
-        note.setId(id);
-        return notesRepository.save(note); 
+        Note existing = notesRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Note not found with id " + id));
+    
+        existing.setPatient(note.getPatient());
+        existing.setNote(note.getNote());
+        existing.setPatId(note.getPatId());
+    
+        return notesRepository.save(existing);
     }
+    
 
     public void deleteById(String id) {
         notesRepository.deleteById(id);
