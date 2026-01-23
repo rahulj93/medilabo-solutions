@@ -28,4 +28,16 @@ public class NotesService {
         return notesRepository.findAll(); 
     }
 
+    public Note save(Note note) {
+        return notesRepository.save(note); 
+    }
+
+    public Note update(String id, Note note) {
+        note.setId(id);
+        return notesRepository.save(note); 
+    }
+
+    public void deleteById(String id) {
+        notesRepository.deleteById(id);
+    }
 }
