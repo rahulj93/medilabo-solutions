@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medilabosolutions.notesapi.model.Note;
+import com.medilabosolutions.notesapi.model.Patient;
 import com.medilabosolutions.notesapi.service.NotesService;
 
 
@@ -32,9 +33,10 @@ public class NotesController {
         return notesService.getByPatId(patId); 
     }
 
-    @GetMapping(params = "patient")
-    public List<Note> getNotesByPatientName(String patient) {
-        return notesService.getByPatientName(patient);  
+
+    @GetMapping("/{id}")
+    public Patient getPatient(@PathVariable String id) {
+        return notesService.lookupPatient(id); 
     }
 
     @GetMapping
@@ -42,8 +44,8 @@ public class NotesController {
         return notesService.findAll(); 
     }
 
-    @PostMapping
-    public ResponseEntity<Note> createNote(@RequestBody Note note) {
+    @PostMapping("/{id}") // make sure to add id and verify that patient exists in Patients db 
+    public ResponseEntity<Note> createNote(@PathVariable String id, @RequestBody Note note) {
         Note saved = notesService.save(note); 
         return new ResponseEntity<>(saved, HttpStatus.CREATED); 
     }
@@ -62,3 +64,8 @@ public class NotesController {
 
 
 }
+
+/*
+- need patient id, not patient here 
+
+*/

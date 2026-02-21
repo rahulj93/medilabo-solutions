@@ -11,11 +11,10 @@ public class Note {
     private String id; 
 
     private String patId; 
-    private String patient; 
     private String note; 
 
-    public Note(String patient, String note) {
-        this.patient = patient; 
+    public Note(String patId, String note) {
+        this.patId = patId; 
         this.note = note; 
     }
 
@@ -35,14 +34,6 @@ public class Note {
         this.patId = patId; 
     }
 
-    public String getPatient() {
-        return patient; 
-    }
-
-    public void setPatient(String patient) {
-        this.patient = patient; 
-    }
-
     public String getNote() {
         return note; 
     }
@@ -51,3 +42,11 @@ public class Note {
         this.note = note; 
     }
 }
+
+/* 
+- we only want one id , not both (get rid of patId, keep Id)
+- acutally don't mix with _id (internal id)... keep patId, get rid of Id  
+- patient name field needed here 
+
+
+*/ 

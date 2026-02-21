@@ -19,6 +19,10 @@ public class PatientService {
     //     return patientRepository.getPatients(); 
     // }
 
+    public Patient getPatientById(Long id) {
+        return patientRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient not found")); 
+    }
+
     public Patient getPatient(String lastName, String firstName) {
         // return patientRepository.getPatient(lastName, firstName);
         return patientRepository.findByFirstNameAndLastName(firstName, lastName).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient not found"));
