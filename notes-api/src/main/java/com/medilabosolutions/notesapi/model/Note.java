@@ -1,5 +1,7 @@
 package com.medilabosolutions.notesapi.model;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,12 +12,16 @@ public class Note {
     @Id 
     private String id; 
 
-    private String patId; 
-    private String note; 
+    private String patient; 
 
-    public Note(String patId, String note) {
-        this.patId = patId; 
-        this.note = note; 
+    // private String patId; 
+    private List<String> notes; 
+
+    public Note(String id, String patient, List<String> notes) {
+        this.id = id; 
+        // this.patId = patId; 
+        this.patient = patient; 
+        this.notes = notes; 
     }
 
     public String getId() {
@@ -26,20 +32,20 @@ public class Note {
         this.id = id; 
     }
 
-    public String getPatId() {
-        return patId; 
+    public String getPatient() {
+        return patient; 
     } 
 
-    public void setPatId(String patId) {
-        this.patId = patId; 
+    public void setPatient(String patient) {
+        this.patient = patient; 
     }
 
-    public String getNote() {
-        return note; 
+    public List<String> getNotes() {
+        return notes; 
     }
 
-    public void setNote(String note) {
-        this.note = note; 
+    public void setNotes(List<String> notes) {
+        this.notes = notes; 
     }
 }
 

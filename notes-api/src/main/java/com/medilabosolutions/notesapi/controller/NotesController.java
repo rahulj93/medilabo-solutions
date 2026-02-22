@@ -4,11 +4,9 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,13 +26,13 @@ public class NotesController {
         this.notesService = notesService;
     }
 
-    @GetMapping(params= "patId")
-    public List<Note> getNotesByPatId(String patId) {
-        return notesService.getByPatId(patId); 
+    @GetMapping(params= "id")
+    public Note getNotesById(String id) {
+        return notesService.findById(id); 
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/patient/{id}")
     public Patient getPatient(@PathVariable String id) {
         return notesService.lookupPatient(id); 
     }
@@ -46,23 +44,9 @@ public class NotesController {
 
     @PostMapping("/{id}") // make sure to add id and verify that patient exists in Patients db 
     public ResponseEntity<Note> createNote(@PathVariable String id, @RequestBody Note note) {
-        Note saved = notesService.save(note); 
+        Note saved = notesService.save(id, note); 
         return new ResponseEntity<>(saved, HttpStatus.CREATED); 
     }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Note> updateNote(@PathVariable String id, @RequestBody Note note) {
-        Note updated = notesService.update(id, note);
-        return ResponseEntity.ok(updated);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletenote(@PathVariable String id) {
-        notesService.deleteById(id);
-        return ResponseEntity.noContent().build(); 
-    }
-
-
 }
 
 /*
