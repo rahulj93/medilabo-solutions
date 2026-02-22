@@ -1,3 +1,5 @@
+package com.medilabosolutions.diabetesreportapi.model;
+
 public class DiabetesReport {
 
     String id; //this is the patient id 
