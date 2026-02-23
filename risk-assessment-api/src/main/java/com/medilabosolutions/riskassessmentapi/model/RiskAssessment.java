@@ -1,12 +1,12 @@
-package com.medilabosolutions.diabetesreportapi.model;
+package com.medilabosolutions.riskassessmentapi.model;
 
-public class DiabetesReport {
+public class RiskAssessment {
 
     String id; //this is the patient id 
     String patientName; 
     String riskLevel; 
     
-    public DiabetesReport(String id, String patientName, String riskLevel) {
+    public RiskAssessment(String id, String patientName, String riskLevel) {
         this.id = id; 
         this.patientName = patientName; 
         this.riskLevel = riskLevel; 

@@ -25,8 +25,14 @@ public class NotesService {
         this.webClient = webClient; 
     }
 
+    // public Note findById(String id) {
+    //     return notesRepository.findById(id).orElseThrow(() -> new RuntimeException("Note not found with id " + id)); 
+    // }
     public Note findById(String id) {
-        return notesRepository.findById(id).orElseThrow(() -> new RuntimeException("Note not found with id " + id)); 
+        return notesRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Note not found with id " + id
+            )); 
     }
 
     public Patient lookupPatient(String id) {
