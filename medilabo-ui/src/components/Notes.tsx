@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export const Notes = ({patientNotes: {id, notes}} : {patientNotes: any}) => {
+export const Notes = ({patientNotes: {id, patient, notes}} : {patientNotes: any}) => {
     // const [notes, setNotes] = useState<any[]>([]);
 
 
@@ -18,25 +18,38 @@ export const Notes = ({patientNotes: {id, notes}} : {patientNotes: any}) => {
 
 
     return (
-        <div>
-            <h3>Notes</h3>
-            {/* {patientNotes?.notes?.length === 0 && <div>No notes found</div>} */}
-
-            {/* {patientNotes.notes.map(({ id, notes }: {id: string, notes: string[]}) => ( */}
+        <div style={{textAlign: 'left', fontSize: 14, width: '900px'}}>
+            <h3>Notes for {patient}: </h3>
+            {!notes && <div>No notes found</div>}
                 <div key={id}>
                     <ul style={{margin: 0, paddingLeft: 20, listStylePosition: 'inside'}}>
                         {notes?.map((note: string, index: string) => <li key={index}>{note}</li>)}
                     </ul>
                 </div>
-            {/* ))} */}
-
-            {/* {notes.map(({ id, notes }) => (
-                <div key={id}>
-                    <ul style={{margin: 0, paddingLeft: 20, listStylePosition: 'inside'}}>
-                        {notes?.map((note: string) => <li>{note}</li>)}
-                    </ul>
-                </div>
-            ))} */}
+            {notes?.length > 0 && null
+            // (
+            //     <table style={{
+            //         // border: "1px solid #ccc", 
+            //         borderCollapse: "collapse",
+            //         // width: "75%"
+            //         }}>
+            //         <thead>
+            //             <tr>
+            //                 {/* <th style={{ border: "1px solid #ccc"}}>Timestamp</th> */}
+            //                 <th style={{ border: "1px solid #ccc"}}>Notes for {patient}: </th>
+            //             </tr>
+            //         </thead>
+            //         <tbody>
+            //             {notes?.map((note: string, index: string) => (
+            //                 <tr key={index}>
+            //                     {/* <td>{new Date().getTime()}</td> */}
+            //                     <td style={{ border: "1px solid #ccc"}}>{note}</td>
+            //                 </tr>)
+            //             )}
+            //         </tbody>
+            //     </table>
+            // )
+            }
         </div>
     )
 }
