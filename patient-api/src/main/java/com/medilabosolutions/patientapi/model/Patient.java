@@ -30,13 +30,18 @@ public class Patient {
         // In case we use Jackson 
     }
 
-    public Patient(String lastName, String firstName, String dateOfBirth, String gender, String address, String phone) {
+    public Patient(Long id, String lastName, String firstName, String dateOfBirth, String gender, String address, String phone) {
+        this.id = id; 
         this.lastName = lastName;
         this.firstName = firstName; 
         this.dateOfBirth = dateOfBirth;
         this.gender = gender; 
         this.address = address;
         this.phone = phone;
+    }
+
+    public Long getId() {
+        return id; 
     }
 
     public String getLastName() {

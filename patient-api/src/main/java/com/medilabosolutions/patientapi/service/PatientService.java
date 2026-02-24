@@ -1,5 +1,7 @@
 package com.medilabosolutions.patientapi.service;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,9 +17,9 @@ public class PatientService {
         this.patientRepository = patientRepository; 
     }
 
-    // public List<Patient> getPatients() {
-    //     return patientRepository.getPatients(); 
-    // }
+    public List<Patient> getPatients() {
+        return patientRepository.findAll(); 
+    }
 
     public Patient getPatientById(Long id) {
         return patientRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient not found")); 
