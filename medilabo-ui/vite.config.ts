@@ -14,6 +14,10 @@ export default defineConfig({
       '/notes': {
         target: 'http://localhost:8081',
         changeOrigin: true 
+      },
+      '/risk-assessment': {
+        target: 'http://localhost:8082',
+        changeOrigin: true 
       }
     }
   }

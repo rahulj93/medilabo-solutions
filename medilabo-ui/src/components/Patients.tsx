@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 
 
-export const Patients = () => {
+export const Patients = ({handleLoadNotes, handleLoadDiabetesReport} : {
+    handleLoadNotes: (id: string) => void; 
+    handleLoadDiabetesReport: (id: string) => void;
+}) => {
     const [patients, setPatients] = useState<any[]>([]);
 
 
@@ -103,10 +106,10 @@ export const Patients = () => {
                                                 <button onClick={() => handleDelete(row.id)}>
                                                     Delete
                                                 </button>
-                                                <button onClick={() => { }}>
+                                                <button onClick={() => handleLoadNotes(row.id)}>
                                                     Load Notes
                                                 </button>
-                                                <button onClick={() => { }}>
+                                                <button onClick={() => handleLoadDiabetesReport(row.id)}>
                                                     Load Diabetes Risk Report
                                                 </button>
                                             </>

@@ -6,7 +6,9 @@ import { DiabetesReport } from './components/DiabetesReport';
 
 function App() {
   // const [patients, setPatients] = useState<any>({});
-  // const [notes, setNotes] = useState<any[]>([]);
+  const [patientNotes, setPatientNotes] = useState<any>({});
+  const [diabetesReport, setDiabetesReport] = useState<any>({});
+
 
   // useEffect(() => {
   //   // Fetch patient by query params
@@ -45,11 +47,30 @@ function App() {
   //   setRows(notes)
   // },[notes])
 
+  const handleLoadNotes = (id: string) => {
+    fetch(`/notes?id=${id}`)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data); 
+        setPatientNotes(data); 
+      })
+  }
+
+  const handleLoadDiabetesReport = (id: string) => {
+    fetch(`/risk-assessment/diabetes-report/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data); 
+        setDiabetesReport(data); 
+      })
+  }
+
   return (
     <div style={{display:' flex', flexDirection: 'column'}}>
-      <Patients/>
-      <Notes/>
-      <DiabetesReport/>
+      <h1>Medilabo Solutions</h1>
+      <Patients handleLoadNotes={handleLoadNotes} handleLoadDiabetesReport={handleLoadDiabetesReport}/>
+      <Notes patientNotes={patientNotes}/>
+      <DiabetesReport diabetesReport={diabetesReport}/>
     </div>
   )
 
