@@ -2,6 +2,7 @@ package com.medilabosolutions.patientapi.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,8 +55,8 @@ public class PatientController {
     //     return patientService.updatePatient(lastName, firstName);  
     // }
 
-    // @DeleteMapping("/patient")
-    // public List<Patient> deletePatient(String lastName, String firstName) {
-    //     return patientService.deletePatient(lastName, firstName);
-    // }
+    @DeleteMapping("/patient/{id}")
+    public void deletePatient(@PathVariable Long id) {
+        patientService.deletePatient(id);
+    }
 }

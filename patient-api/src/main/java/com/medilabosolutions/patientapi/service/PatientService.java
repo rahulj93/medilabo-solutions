@@ -50,12 +50,8 @@ public class PatientService {
 
         return patientRepository.save(existing);
     }
-
-    // public Patient updatePatient(String lastName, String firstName) {
-    //     return patientRepository.updatePatient(lastName, firstName);
-    // }
-
-    // public List<Patient> deletePatient(String lastName, String firstName) {
-    //     return patientRepository.deletePatient(lastName, firstName);
-    // }
+    
+    public void deletePatient(Long id) {
+        patientRepository.deleteById(id);
+    }
 }

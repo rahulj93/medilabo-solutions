@@ -19,6 +19,7 @@ export const Notes = ({patientNotes: {id, patient, notes}} : {patientNotes: any}
 
     return (
         <div style={{textAlign: 'left', fontSize: 14, width: '900px'}}>
+            {/* <br/> */}
             <h3>Notes for {patient}: </h3>
             {!notes && <div>No notes found</div>}
                 <div key={id}>
@@ -31,7 +32,7 @@ export const Notes = ({patientNotes: {id, patient, notes}} : {patientNotes: any}
             //     <table style={{
             //         // border: "1px solid #ccc", 
             //         borderCollapse: "collapse",
-            //         // width: "75%"
+            //         width: "900px"
             //         }}>
             //         <thead>
             //             <tr>
