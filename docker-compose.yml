@@ -1,0 +1,35 @@
+services:
+  patients-db:
+    image: postgres:18.1
+    container_name: medilabo-solutions
+    environment:
+      - POSTGRES_DB=medilabo_solutions
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+    ports:
+      - "5432:5432"
+    volumes: 
+      # - postgres_data:/var/lib/postgresql
+      # - medilabo_solutions_postgres_data:/var/lib/postgresql # use old volume
+      - medilabo_solutions_postgres_data:/var/lib/postgresql
+
+  patient-api: 
+    image: patient-api:latest 
+    container_name: patient-api 
+    build:
+      context: ./patient-api # folder with patient-api microservice 
+      # dockerfile: Dockerfile 
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://patients-db:5432/medilabo_solutions
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SERVER_ADDRESS: 0.0.0.0
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - patients-db    
+    restart: on-failure
+
+volumes:
+  medilabo_solutions_postgres_data:
