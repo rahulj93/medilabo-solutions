@@ -31,5 +31,21 @@ services:
       - patients-db    
     restart: on-failure
 
+  notes-api: 
+    image: notes-api:latest
+    container_name: notes-api
+    build:
+      context: ./notes-api
+    environment:
+      # SPRING_DATA_MONGODB_URI: mongodb://localhost:27017/medilabo_solutions
+      SPRING_DATA_MONGODB_URI: mongodb://host.docker.internal:27017/medilabosolutions
+      SERVER_PORT: 8081
+    ports:
+      - "8081:8081"
+    # depends_on:
+    #   - notes-db
+    restart: on-failure
+    
+
 volumes:
   medilabo_solutions_postgres_data:
