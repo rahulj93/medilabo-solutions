@@ -38,7 +38,7 @@ public class NotesService {
     public Patient lookupPatient(String id) {
         System.out.println(id);
         return webClient.get()
-            .uri("http://localhost:8080/patient/{id}", id)
+            .uri("http://host.docker.internal:8080/patient/{id}", id)
             .retrieve()
             .onStatus(status -> status.value() == 404,
                 response -> Mono.error(new ResponseStatusException(

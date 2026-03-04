@@ -45,6 +45,14 @@ public class RiskLevelAssessor {
     }
 
     public static String classifyDiabetesRiskLevel(int age, String gender, int numTriggerTerms) {
+        System.out.println(age);
+        System.out.println(gender);
+        System.out.println(numTriggerTerms);
+
+        if (gender == null || gender.isBlank()) {
+            throw new IllegalArgumentException("Gender is missing for patient");
+        }
+
         String defaultRiskLevel = "None"; 
         if (numTriggerTerms <= 1) return defaultRiskLevel;
 

@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.medilabosolutions</groupId>
-    <artifactId>diabetes-report-api</artifactId>
+    <artifactId>risk-assessment-api</artifactId>
     <version>0.0.1-SNAPSHOT</version> 
     <description>Medilabo Solutions Diabetes Report API</description>
     <parent>
@@ -26,4 +26,12 @@
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project> 
