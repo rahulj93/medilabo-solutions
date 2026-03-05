@@ -76,6 +76,26 @@ services:
       - notes-api 
     restart: on-failure    
 
+  gateway-api:
+    image: gateway-service:latest
+    container_name: gateway-service
+    build:
+      context: ./gateway-service
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://host.docker.internal:27017/medilabo_solutions
+      PATIENT_API_URL: http://host.docker.internal:8080
+      NOTES_API_URL: http://host.docker.internal:8081
+      RISK_ASSESSMENT_API_URL: http://host.docker.internal:8082
+      SERVER_PORT: 20000 
+    ports:
+      - "20000:20000"
+    depends_on:
+      - patient-api
+      - notes-api
+      - risk-assessment-api 
+    restart: on-failure
+    
+
 volumes:
   medilabo_solutions_postgres_data:
   # notes_db_data: 
