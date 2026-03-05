@@ -94,6 +94,19 @@ services:
       - notes-api
       - risk-assessment-api 
     restart: on-failure
+
+  medilabo-ui: 
+    image: medilabo-ui:latest
+    container_name: medilabo-ui
+    build:
+      context: ./medilabo-ui
+    environment:
+      - REACT_APP_API_GATEWAY_URL= http://host.docker.internal:20000
+    ports: 
+      - "3000:5183"
+    depends_on:
+      - gateway-api
+    restart: on-failure
     
 
 volumes:

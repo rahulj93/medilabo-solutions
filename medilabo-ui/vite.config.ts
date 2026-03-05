@@ -5,18 +5,19 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: true, // This allows the host machine to access the containerized Vite dev server.
     port: 5183, // Vite dev server port 
     proxy: {
       '/patient': {
-        target: 'http://localhost:8080',
+        target: 'http://host.docker.internal:20000',
         changeOrigin: true
       },
       '/notes': {
-        target: 'http://localhost:8081',
+        target: 'http://host.docker.internal:20000',
         changeOrigin: true 
       },
       '/risk-assessment': {
-        target: 'http://localhost:8082',
+        target: 'http://host.docker.internal:20000',
         changeOrigin: true 
       }
     }
