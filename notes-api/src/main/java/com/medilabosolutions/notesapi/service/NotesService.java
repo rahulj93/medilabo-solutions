@@ -17,12 +17,13 @@ import reactor.core.publisher.Mono;
 public class NotesService {
 
     private final NotesRepository notesRepository; 
-
     private final WebClient webClient; 
+    private final String patientApiUrl; 
 
     public NotesService(NotesRepository notesRepository, WebClient webClient) {
         this.notesRepository = notesRepository; 
         this.webClient = webClient; 
+        this.patientApiUrl = System.getenv("PATIENT_API_URL");
     }
 
     // public Note findById(String id) {
@@ -38,7 +39,7 @@ public class NotesService {
     public Patient lookupPatient(String id) {
         System.out.println(id);
         return webClient.get()
-            .uri("http://host.docker.internal:8080/patient/{id}", id)
+            .uri(patientApiUrl + "/patient/{id}", id)
             .retrieve()
             .onStatus(status -> status.value() == 404,
                 response -> Mono.error(new ResponseStatusException(

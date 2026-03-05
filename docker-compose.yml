@@ -13,15 +13,15 @@ services:
       # - medilabo_solutions_postgres_data:/var/lib/postgresql # use old volume
       - medilabo_solutions_postgres_data:/var/lib/postgresql
 
-  # notes-db:
-  #   image: mongo:8.2.3-noble
-  #   container_name: notes-db
-  #   environment: 
-  #     MONGO_INITDB_DATABASE: medilabo_solutions
-  #   ports: 
-  #     - "27017:27017"
-  #   volumes:
-  #     - medilabo_solutions_mongodb_data:/data/db
+  notes-db:
+    image: mongo:8.2.3-noble
+    container_name: notes-db
+    environment: 
+      MONGO_INITDB_DATABASE: medilabo_solutions
+    ports: 
+      - "27017:27017"
+    volumes:
+      - medilabo_solutions_mongodb_data:/data/db
 
   patient-api: 
     image: patient-api:latest 
@@ -48,12 +48,14 @@ services:
       context: ./notes-api
     environment:
       # SPRING_DATA_MONGODB_URI: mongodb://localhost:27017/medilabo_solutions
-      SPRING_DATA_MONGODB_URI: mongodb://host.docker.internal:27017/medilabosolutions
+      SPRING_DATA_MONGODB_URI: mongodb://host.docker.internal:27017/medilabo_solutions
+      PATIENT_API_URL: http://host.docker.internal:8080
       SERVER_PORT: 8081
     ports:
       - "8081:8081"
-    # depends_on:
-    #   - notes-db
+    depends_on:
+      - patient-api
+      - notes-db
     restart: on-failure
 
   risk-assessment-api:
@@ -62,7 +64,7 @@ services:
     build:
       context: ./risk-assessment-api
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://host.docker.internal:27017/medilabosolutions
+      SPRING_DATA_MONGODB_URI: mongodb://host.docker.internal:27017/medilabo_solutions
       PATIENT_API_URL: http://host.docker.internal:8080
       NOTES_API_URL: http://host.docker.internal:8081
       # SERVER_ADDRESS: 0.0.0.0
