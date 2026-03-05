@@ -1,2 +1,6 @@
+PATIENT_API_URL: http://host.docker.internal:8080
+NOTES_API_URL: http://host.docker.internal:8081
+RISK_ASSESSMENT_API_URL: http://host.docker.internal:8082
+
 server: 
   port: 20000 
