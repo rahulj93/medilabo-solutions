@@ -63,8 +63,12 @@ public class SpringSecurityConfig {
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); // allow cookies
-        config.addAllowedOrigin("http://localhost:3000"); // React dev server
-        config.addAllowedOrigin("http://localhost:5183"); // Vite dev server inside Docker 
+        config.addAllowedOriginPattern("*"); // <--- allow all origins
+        // config.addAllowedOrigin("http://localhost:3000"); // React dev server
+        // config.addAllowedOrigin("http://gateway-api:3000"); // React dev server
+        // config.addAllowedOrigin("http://localhost:5183"); // Vite dev server inside Docker 
+        // config.addAllowedOrigin("http://gateway-api:20000"); // Gateway server 
+        // config.addAllowedOrigin("http://localhost:20000"); // Gateway server
         config.addAllowedHeader("*");
         config.addAllowedMethod("*"); // GET, POST, etc.
 
@@ -94,10 +98,7 @@ public class SpringSecurityConfig {
             .pathMatchers(HttpMethod.OPTIONS).permitAll() // allow preflight
             .pathMatchers("/auth/login").permitAll()
             .pathMatchers("/api/public/**").permitAll()
-            .pathMatchers("/patient/**").permitAll()
-            .pathMatchers("/patients").permitAll()
-            .pathMatchers("/notes").permitAll()
-            .pathMatchers("/risk-assessment/**").permitAll()
+            .pathMatchers("/patient/**", "/patients/**", "/notes/**", "/risk-assessment/**").permitAll()
             .pathMatchers("/api/user/**").hasRole("USER")
             .pathMatchers("/api/admin/**").hasRole("ADMIN")
             .anyExchange().authenticated()

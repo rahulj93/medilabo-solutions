@@ -47,6 +47,13 @@ export const Patients = ({ handleLoadNotes, handleLoadDiabetesReport }: {
   handleLoadNotes: (id: string) => void;
   handleLoadDiabetesReport: (id: string) => void;
 }) => {
+  // const API_BASE = 'http://localhost:20000'; 
+  // const API_BASE = import.meta.env.VITE_API_GATEWAY_URL; 
+  // const API_BASE = ''; 
+  // const API_BASE = 'http://gateway-api:20000'; 
+  const API_BASE = window.location.hostname === 'localhost' 
+  ? 'http://localhost:20000' 
+  : 'http://gateway-api:20000';
   const [patients, setPatients] = useState<any[]>([]);
   const [editingId, setEditingId] = useState<string | undefined>(undefined);
   const [rowToEdit, setRowToEdit] = useState<Patient>({});
@@ -55,7 +62,7 @@ export const Patients = ({ handleLoadNotes, handleLoadDiabetesReport }: {
   const [isSaved, setIsSaved] = useState<boolean>(true);
 
   const fetchPatients = useCallback(() => {
-    fetch("/patients")
+    fetch(`${API_BASE}/patients`)
       .then(res => res.json())
       .then(data => {
         // console.log("Patient:", data)
@@ -75,13 +82,6 @@ export const Patients = ({ handleLoadNotes, handleLoadDiabetesReport }: {
   }, [])
 
   useEffect(() => {
-    // Fetch patient by query params
-    // fetch("/patient?firstName=John&lastName=Doe")
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     console.log("Patient:", data)
-    //     setPatients(data);
-    //   });    
     fetchPatients();
   }, [fetchPatients])
 
@@ -101,7 +101,7 @@ export const Patients = ({ handleLoadNotes, handleLoadDiabetesReport }: {
       lastName: newRow.name?.split(' ')[1],
       ...newRow
     }
-    await fetch("/patient", {
+    await fetch(`${API_BASE}/patient`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newPatient)
@@ -128,7 +128,7 @@ export const Patients = ({ handleLoadNotes, handleLoadDiabetesReport }: {
 
   const handleEditInput = (field: keyof Patient, value: string) => setRowToEdit({ ...rowToEdit, [field]: value }); 
 
-  const saveEdit = async (row: Patient) => {
+  const saveEdit = async (_row: Patient) => {
     if (!rowToEdit.id) return;
 
     const updatedPatient = {
@@ -138,7 +138,7 @@ export const Patients = ({ handleLoadNotes, handleLoadDiabetesReport }: {
     }
 
     try {
-      const response = await fetch(`/patient/${updatedPatient.id}`, {
+      const response = await fetch(`${API_BASE}/patient/${updatedPatient.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedPatient)
@@ -166,7 +166,7 @@ export const Patients = ({ handleLoadNotes, handleLoadDiabetesReport }: {
     if (!confirmDelete) return; 
 
     try {
-      const response = await fetch(`/patient/${id}`, {method: 'DELETE'}); 
+      const response = await fetch(`${API_BASE}/patient/${id}`, {method: 'DELETE'}); 
       if (!response.ok) {
         throw new Error(`Failed to delete patient: ${response.status}`)
       }

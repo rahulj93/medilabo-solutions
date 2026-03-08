@@ -1,214 +1,99 @@
-import { useEffect, useState } from 'react'
-import './App.css'
+import { useEffect, useState } from 'react';
+import './App.css';
 import { Patients } from './components/Patients';
 import { Notes } from './components/Notes';
 import { DiabetesReport } from './components/DiabetesReport';
+import { LoginForm } from './components/LoginForm';
 
 function App() {
-  // const [patients, setPatients] = useState<any>({});
+  const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [patientNotes, setPatientNotes] = useState<any>({});
   const [diabetesReport, setDiabetesReport] = useState<any>({});
 
+  // Load token from localStorage on app start
+  useEffect(() => {
+    const savedToken = localStorage.getItem('jwt');
+    if (savedToken) setToken(savedToken);
+    else setLoading(false);
+  }, []);
 
-  // useEffect(() => {
-  //   // Fetch patient by query params
-  //   // fetch("/patient?firstName=John&lastName=Doe")
-  //   //   .then(res => res.json())
-  //   //   .then(data => {
-  //   //     console.log("Patient:", data)
-  //   //     setPatients(data);
-  //   //   });
+  // Fetch current user whenever token changes
+  useEffect(() => {
+    if (!token) {
+      setUser(null);
+      setLoading(false);
+      return;
+    }
 
-  //   // Fetch all notes
-  //   // fetch("/notes")
-  //   //   .then(res => res.json())
-  //   //   .then(data => {
-  //   //     console.log("Notes:", data)
-  //   //     setNotes(data);
-  //   //   });
-  // }, [])
-
-  // const handleAddNew = () => {} 
-
-  // const columns = ['last_name', 'first_name', 'date_of_birth', 'gender', 'address', 'phone']
-  // const columns = ['patient', 'note', 'patId']
-
-  // const handleChange = (a,b) => {} 
-  // const saveEdit = () => {} 
-  // const cancelEdit = () => {} 
-  // const startEdit = (x) => {} 
-  // const handleDelete = (x) => {} 
-
-  // const [rows, setRows] = useState(notes);
-  // // const [editingId, setEditingId] = useState(null);
-  // // const [draftRow, setDraftRow] = useState<any>({});
-
-  // useEffect(() => {
-  //   setRows(notes)
-  // },[notes])
+    fetch('http://localhost:20000/api/user/me', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+      .then(res => {
+        if (!res.ok) {
+          setToken(null);
+          localStorage.removeItem('jwt');
+          setUser(null);
+          setLoading(false);
+          return;
+        }
+        return res.text();
+      })
+      .then(username => {
+        if (username) setUser(username);
+        setLoading(false);
+      })
+      .catch(() => {
+        setToken(null);
+        localStorage.removeItem('jwt');
+        setUser(null);
+        setLoading(false);
+      });
+  }, [token]);
 
   const handleLoadNotes = (id: string) => {
-    fetch(`/notes?id=${id}`)
+    if (!token) return;
+    fetch(`http://localhost:20000/notes?id=${id}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
       .then(res => res.json())
-      .then(data => {
-        console.log(data); 
-        setPatientNotes(data); 
-      })
-  }
+      .then(data => setPatientNotes(data));
+  };
 
   const handleLoadDiabetesReport = (id: string) => {
-    fetch(`/risk-assessment/diabetes-report/${id}`)
+    if (!token) return;
+    fetch(`http://localhost:20000/risk-assessment/diabetes-report/${id}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
       .then(res => res.json())
-      .then(data => {
-        console.log(data); 
-        setDiabetesReport(data); 
-      })
-  }
+      .then(data => setDiabetesReport(data));
+  };
 
-  return (
-    <div style={{display:' flex', flexDirection: 'column'}}>
+  const handleLogout = () => {
+    setToken(null);
+    setUser(null);
+    localStorage.removeItem('jwt');
+  };
+
+  if (loading) return <div>Loading Medilabo Solutions...</div>;
+
+  return user ? (
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <button onClick={handleLogout} style={{ alignSelf: 'flex-end' }}>Logout</button>
       <h1>Medilabo Solutions</h1>
-      <Patients handleLoadNotes={handleLoadNotes} handleLoadDiabetesReport={handleLoadDiabetesReport}/>
-      <Notes patientNotes={patientNotes}/>
-      <DiabetesReport diabetesReport={diabetesReport}/>
+      <Patients handleLoadNotes={handleLoadNotes} handleLoadDiabetesReport={handleLoadDiabetesReport} />
+      <Notes patientNotes={patientNotes} />
+      <DiabetesReport diabetesReport={diabetesReport} />
     </div>
-  )
-
-  // return (
-  //   <div>
-  //   <button onClick={handleAddNew}>Add Row</button>
-
-  //   <table style={{ borderCollapse: "collapse", width: "100%" }}>
-  //     <thead>
-  //       <tr>
-  //         {columns.map((col) => (
-  //           <th key={col} style={{ border: "1px solid #ccc", padding: 8 }}>
-  //             {col}
-  //           </th>
-  //         ))}
-  //         <th style={{ border: "1px solid #ccc", padding: 8 }}>
-  //           Actions
-  //         </th>
-  //       </tr>
-  //     </thead>
-
-  //     <tbody>
-  //       {rows.map((row: any) => {
-  //         const isEditing = editingId === row.id;
-
-  //         return (
-  //           <tr key={row.id}>
-  //             {columns.map((col) => (
-  //               <td key={col} style={{ border: "1px solid #ccc", padding: 8 }}>
-  //                 {isEditing ? (
-  //                   <input
-  //                     value={draftRow[col]}
-  //                     onChange={(e) =>
-  //                       handleChange(col, e.target.value)
-  //                     }
-  //                   />
-  //                 ) : (
-  //                   row[col]
-  //                 )}
-  //               </td>
-  //             ))}
-
-  //             <td style={{ border: "1px solid #ccc", padding: 8 }}>
-  //               {isEditing ? (
-  //                 <>
-  //                   <button onClick={saveEdit}>Save</button>
-  //                   <button onClick={cancelEdit}>Cancel</button>
-  //                 </>
-  //               ) : (
-  //                 <>
-  //                   <button onClick={() => startEdit(row)}>Edit</button>
-  //                   <button onClick={() => handleDelete(row.id)}>
-  //                     Delete
-  //                   </button>
-  //                 </>
-  //               )}
-  //             </td>
-  //           </tr>
-  //         );
-  //       })}
-  //     </tbody>
-  //   </table>
-  // </div>
-  // )
-
-  // return (
-  //   <>
-  //     <h1>Medilabo Solutions</h1>
-  //     <div style={{ width: '70vw', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-  //       <form onSubmit={() => { }}>
-  //         <h2>Patient</h2>
-  //         <div style={{ display: 'flex', flexDirection: 'column' }}>
-  //           <label>
-  //             Last Name:
-  //             <input type="text" value={undefined} onChange={() => { }} placeholder="Enter patient's last name" />
-  //           </label>
-  //           <label>
-  //             First Name:
-  //             <input type="text" value={undefined} onChange={() => { }} placeholder="Enter patient's first name" />
-  //           </label>
-  //           <label>
-  //             Date of birth:
-  //             <input type="text" value={undefined} onChange={() => { }} placeholder="Enter patient's date of birth" />
-  //           </label>
-  //           <label>
-  //             Gender:
-  //             <input type="text" value={undefined} onChange={() => { }} placeholder="Enter patient name's gender" />
-  //           </label>
-  //           <label>
-  //             Address:
-  //             <input type="text" value={undefined} onChange={() => { }} placeholder="Enter patient's address" />
-  //           </label>
-  //           <label>
-  //             Phone:
-  //             <input type="text" value={undefined} onChange={() => { }} placeholder="Enter patient's phone number" />
-  //           </label>
-  //         </div>
-  //         <button type="submit">Lookup</button>
-  //         <button type="submit">Add</button>
-  //         <button type="submit">Edit</button>
-  //         <button type="submit">Delete</button>
-  //       </form>
-  //       <form onSubmit={() => { }}>
-  //         <h2>Note</h2>
-  //         <div style={{ display: 'flex', flexDirection: 'column' }}>
-  //           <label>
-  //             ID:
-  //             <input type="text" value={undefined} onChange={() => { }} placeholder="Enter ID" />
-  //           </label>
-  //           <label>
-  //             Patient Name:
-  //             <input type="text" value={undefined} onChange={() => { }} placeholder="Enter patient's full name" />
-  //           </label>
-  //           <label>
-  //             Note:
-  //             <input type="text" value={undefined} onChange={() => { }} placeholder="Enter your note" />
-  //           </label>
-  //           <label>
-  //             patId:
-  //             <input type="text" value={undefined} onChange={() => { }} placeholder="Enter patient's ID" />
-  //           </label>
-  //         </div>
-  //         <button type="submit">Lookup</button>
-  //         <button type="submit">Add</button>
-  //         <button type="submit">Edit</button>
-  //         <button type="submit">Delete</button>
-  //       </form>
-  //     </div>
-  //     <div>
-  //     {patients.lastName}, {patients.firstName} , {patients.dateOfBirth}, {patients.gender}, {patients.address}, {patients.phone}
-  //     </div>
-  //     <div>
-  //       {notes.map(note => (
-  //         <div>{note.patient}:  {note.note}</div>
-  //       ))}
-  //     </div>
-  //   </>
-  // )
+  ) : (
+    <LoginForm onLogin={(jwt, username) => {
+      setToken(jwt);
+      localStorage.setItem('jwt', jwt);
+      setUser(username);
+    }} />
+  );
 }
 
-export default App
+export default App;
+

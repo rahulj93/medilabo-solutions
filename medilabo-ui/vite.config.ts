@@ -8,18 +8,16 @@ export default defineConfig({
     host: true, // This allows the host machine to access the containerized Vite dev server.
     port: 5183, // Vite dev server port 
     proxy: {
-      '/patient': {
-        target: 'http://host.docker.internal:20000',
-        changeOrigin: true
+      '/api/user/me': {
+        target: 'http://localhost:20000',
+        changeOrigin: true,
+        secure: false, 
+        cookieDomainRewrite: "localhost"
       },
-      '/notes': {
-        target: 'http://host.docker.internal:20000',
-        changeOrigin: true 
-      },
-      '/risk-assessment': {
-        target: 'http://host.docker.internal:20000',
-        changeOrigin: true 
-      }
+      '/patient': {target: process.env.REACT_APP_API_GATEWAY_URL, changeOrigin: true, secure: false},
+      '/patients': {target: process.env.REACT_APP_API_GATEWAY_URL, changeOrigin: true, secure: false},
+      '/notes': {target: process.env.REACT_APP_API_GATEWAY_URL, changeOrigin: true, secure: false},
+      '/risk-assessment': {target: process.env.REACT_APP_API_GATEWAY_URL, changeOrigin: true, secure: false}
     }
   }
 })

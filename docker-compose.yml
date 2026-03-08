@@ -48,8 +48,8 @@ services:
       context: ./notes-api
     environment:
       # SPRING_DATA_MONGODB_URI: mongodb://localhost:27017/medilabo_solutions
-      SPRING_DATA_MONGODB_URI: mongodb://host.docker.internal:27017/medilabo_solutions
-      PATIENT_API_URL: http://host.docker.internal:8080
+      SPRING_DATA_MONGODB_URI: mongodb://notes-db:27017/medilabo_solutions
+      PATIENT_API_URL: http://patient-api:8080
       SERVER_PORT: 8081
     ports:
       - "8081:8081"
@@ -64,9 +64,9 @@ services:
     build:
       context: ./risk-assessment-api
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://host.docker.internal:27017/medilabo_solutions
-      PATIENT_API_URL: http://host.docker.internal:8080
-      NOTES_API_URL: http://host.docker.internal:8081
+      SPRING_DATA_MONGODB_URI: mongodb://notes-db:27017/medilabo_solutions
+      PATIENT_API_URL: http://patient-api:8080
+      NOTES_API_URL: http://notes-api:8081
       # SERVER_ADDRESS: 0.0.0.0
       SERVER_PORT: 8082
     ports:
@@ -82,10 +82,9 @@ services:
     build:
       context: ./gateway-service
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://host.docker.internal:27017/medilabo_solutions
-      PATIENT_API_URL: http://host.docker.internal:8080
-      NOTES_API_URL: http://host.docker.internal:8081
-      RISK_ASSESSMENT_API_URL: http://host.docker.internal:8082
+      PATIENT_API_URL: http://patient-api:8080
+      NOTES_API_URL: http://notes-api:8081
+      RISK_ASSESSMENT_API_URL: http://risk-assessment-api:8082
       SERVER_PORT: 20000 
     ports:
       - "20000:20000"
@@ -100,10 +99,10 @@ services:
     container_name: medilabo-ui
     build:
       context: ./medilabo-ui
-    environment:
-      - REACT_APP_API_GATEWAY_URL= http://host.docker.internal:20000
+    env_file:
+      - ./medilabo-ui/.env.docker
     ports: 
-      - "3000:5183"
+      - "3000:80"
     depends_on:
       - gateway-api
     restart: on-failure
