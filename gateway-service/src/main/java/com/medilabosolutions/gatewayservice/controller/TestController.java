@@ -25,4 +25,12 @@ public class TestController {
     public String adminEndpoint() {
         return "Hello ADMIN";
     }
+    
+    @GetMapping("/api/user/me")
+    public String getCurrentUser(java.security.Principal principal) {
+        if (principal != null) {
+            System.out.println(principal.getName());
+        }
+        return principal.getName(); // Returns username if logged in, otherwise Spring returns 401 
+    }
 }
