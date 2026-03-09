@@ -17,6 +17,8 @@ function App() {
     const savedToken = localStorage.getItem('jwt');
     if (savedToken) setToken(savedToken);
     else setLoading(false);
+    setPatientNotes({});
+    setDiabetesReport({});
   }, []);
 
   // Fetch current user whenever token changes
@@ -27,7 +29,7 @@ function App() {
       return;
     }
 
-    fetch('http://localhost:20000/api/user/me', {
+    fetch('/api/user/me', {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => {
@@ -54,16 +56,32 @@ function App() {
 
   const handleLoadNotes = (id: string) => {
     if (!token) return;
-    fetch(`http://localhost:20000/notes?id=${id}`, {
+    fetch(`/notes?id=${id}`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => res.json())
-      .then(data => setPatientNotes(data));
+      .then(data => setPatientNotes({ id, ...data })
+      );
   };
+
+  const handleAddNewNote = async (id: string, patient: string, note: string) => {
+    const payload = { id, patient, notes: [note] }
+    const response = await fetch(`/notes/${id}`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    })
+
+    const data = await response.json();
+    console.log(data);
+    setPatientNotes(data);
+  }
 
   const handleLoadDiabetesReport = (id: string) => {
     if (!token) return;
-    fetch(`http://localhost:20000/risk-assessment/diabetes-report/${id}`, {
+    fetch(`/risk-assessment/diabetes-report/${id}`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -83,7 +101,7 @@ function App() {
       <button onClick={handleLogout} style={{ alignSelf: 'flex-end' }}>Logout</button>
       <h1>Medilabo Solutions</h1>
       <Patients handleLoadNotes={handleLoadNotes} handleLoadDiabetesReport={handleLoadDiabetesReport} />
-      <Notes patientNotes={patientNotes} />
+      <Notes patientNotes={patientNotes} handleAddNewNote={handleAddNewNote} />
       <DiabetesReport diabetesReport={diabetesReport} />
     </div>
   ) : (

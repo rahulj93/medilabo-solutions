@@ -1,4 +1,6 @@
-import { useState, useEffect, type CSSProperties, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { tableRowStyle } from "../styles/app.styles";
+import type { InputBoxParams, Patient } from "../types/app.types";
 
 const buttonStyle = {
   fontSize: "12px",
@@ -7,30 +9,7 @@ const buttonStyle = {
   cursor: "pointer"
 }
 
-export interface Patient {
-  id?: string,
-  name?: string,
-  dateOfBirth?: string,
-  address?: string,
-  gender?: string,
-  phone?: string
-}
-
-export interface InputBoxParams {
-  row: Patient,
-  col: keyof Patient,
-  rowState: Patient,
-  handleChangeInput: (b: any, c: any) => void
-}
-
-export const tableRowStyle: CSSProperties = {
-  border: "1px solid #ccc",
-  padding: 8,
-  boxSizing: "border-box"
-}
-
 const InputBox = ({ row, col, rowState, handleChangeInput }: InputBoxParams) => {
-  // console.log(col, row[col])
   return (
     <input
       style={{ width: '100%', boxSizing: 'border-box' }}
@@ -47,13 +26,6 @@ export const Patients = ({ handleLoadNotes, handleLoadDiabetesReport }: {
   handleLoadNotes: (id: string) => void;
   handleLoadDiabetesReport: (id: string) => void;
 }) => {
-  // const API_BASE = 'http://localhost:20000'; 
-  // const API_BASE = import.meta.env.VITE_API_GATEWAY_URL; 
-  // const API_BASE = ''; 
-  // const API_BASE = 'http://gateway-api:20000'; 
-  const API_BASE = window.location.hostname === 'localhost' 
-  ? 'http://localhost:20000' 
-  : 'http://gateway-api:20000';
   const [patients, setPatients] = useState<any[]>([]);
   const [editingId, setEditingId] = useState<string | undefined>(undefined);
   const [rowToEdit, setRowToEdit] = useState<Patient>({});
@@ -62,7 +34,7 @@ export const Patients = ({ handleLoadNotes, handleLoadDiabetesReport }: {
   const [isSaved, setIsSaved] = useState<boolean>(true);
 
   const fetchPatients = useCallback(() => {
-    fetch(`${API_BASE}/patients`)
+    fetch('/patients')
       .then(res => res.json())
       .then(data => {
         setPatients(data
@@ -100,7 +72,7 @@ export const Patients = ({ handleLoadNotes, handleLoadDiabetesReport }: {
       lastName: newRow.name?.split(' ')[1],
       ...newRow
     }
-    await fetch(`${API_BASE}/patient`, {
+    await fetch('/patient', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newPatient)
@@ -135,7 +107,7 @@ export const Patients = ({ handleLoadNotes, handleLoadDiabetesReport }: {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/patient/${updatedPatient.id}`, {
+      const response = await fetch(`/patient/${updatedPatient.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedPatient)
@@ -163,7 +135,7 @@ export const Patients = ({ handleLoadNotes, handleLoadDiabetesReport }: {
     if (!confirmDelete) return; 
 
     try {
-      const response = await fetch(`${API_BASE}/patient/${id}`, {method: 'DELETE'}); 
+      const response = await fetch(`/patient/${id}`, {method: 'DELETE'}); 
       if (!response.ok) {
         throw new Error(`Failed to delete patient: ${response.status}`)
       }
