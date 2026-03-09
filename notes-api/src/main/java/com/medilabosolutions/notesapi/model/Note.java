@@ -14,12 +14,10 @@ public class Note {
 
     private String patient; 
 
-    // private String patId; 
     private List<String> notes; 
 
     public Note(String id, String patient, List<String> notes) {
         this.id = id; 
-        // this.patId = patId; 
         this.patient = patient; 
         this.notes = notes; 
     }
@@ -48,11 +46,3 @@ public class Note {
         this.notes = notes; 
     }
 }
-
-/* 
-- we only want one id , not both (get rid of patId, keep Id)
-- acutally don't mix with _id (internal id)... keep patId, get rid of Id  
-- patient name field needed here 
-
-
-*/ 

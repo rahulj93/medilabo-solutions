@@ -25,11 +25,6 @@ public class PatientService {
         return patientRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient not found")); 
     }
 
-    public Patient getPatient(String lastName, String firstName) {
-        // return patientRepository.getPatient(lastName, firstName);
-        return patientRepository.findByFirstNameAndLastName(firstName, lastName).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient not found"));
-    }
-
     public Patient createPatient(Patient patient) {
         return patientRepository.save(patient);
     }

@@ -35,22 +35,18 @@ public class GatewayApplication {
             .route(
                 p -> p
                 .path("/patient/**")
-                // .filters(f -> f.addRequestHeader("Medilabo", "Patient"))
                 .uri(patientApiUrl))
             .route(
                 p -> p
                 .path("/notes/**")
-                // .filters(f -> f.addRequestHeader("Patient", "Notes"))
                 .uri(notesApiUrl))
             .route(
                 p -> p
                 .path("/notes")
-                // .filters(f -> f.addRequestHeader("Patient", "Notes"))
                 .uri(notesApiUrl))
             .route(
                 p -> p
                 .path("/risk-assessment/**")
-                // .filters(f -> f.addRequestHeader("Patient", "Risk Assessment"))
                 .uri(riskAssessmentApiUrl))
             .build(); 
     }

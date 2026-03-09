@@ -65,7 +65,6 @@ export const Patients = ({ handleLoadNotes, handleLoadDiabetesReport }: {
     fetch(`${API_BASE}/patients`)
       .then(res => res.json())
       .then(data => {
-        // console.log("Patient:", data)
         setPatients(data
           .sort((a: { id: any; }, b: { id: any; }) => Number(a.id) - Number(b.id))
           .map(({ id, lastName, firstName, dateOfBirth, address, gender, phone }: {
@@ -117,8 +116,6 @@ export const Patients = ({ handleLoadNotes, handleLoadDiabetesReport }: {
     setIsAddNewClicked(false)
   }
 
-  // const columns = ['last_name', 'first_name', 'date_of_birth', 'gender', 'address', 'phone']
-  //   const columns = ['id', 'lastName', 'firstName']
   const columns = ['id', 'name', 'gender', 'dateOfBirth', 'address', 'phone']
 
   const startEdit = (row: Patient) => {

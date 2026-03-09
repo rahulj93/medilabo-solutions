@@ -26,9 +26,6 @@ public class NotesService {
         this.patientApiUrl = System.getenv("PATIENT_API_URL");
     }
 
-    // public Note findById(String id) {
-    //     return notesRepository.findById(id).orElseThrow(() -> new RuntimeException("Note not found with id " + id)); 
-    // }
     public Note findById(String id) {
         return notesRepository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(
@@ -37,7 +34,6 @@ public class NotesService {
     }
 
     public Patient lookupPatient(String id) {
-        System.out.println(id);
         return webClient.get()
             .uri(patientApiUrl + "/patient/{id}", id)
             .retrieve()
@@ -46,11 +42,7 @@ public class NotesService {
                     HttpStatus.NOT_FOUND, "Patient not found with id " + id
                 )))
             .bodyToMono(Patient.class)
-            .block(); //blocking for simplicity 
-            // .blockOptional()
-            // .orElseThrow(() -> new ResponseStatusException(
-            //     HttpStatus.NOT_FOUND, "Patient not found with id " + id
-            // )); 
+            .block(); 
     }
 
     public List<Note> findAll() {
@@ -64,7 +56,6 @@ public class NotesService {
 
         // After looking up the patient by his/her id, set the name in note to the same name found patients DB. 
         String patientName = existingPatient.getFirstName() + " " + existingPatient.getLastName(); 
-        // System.out.println(patientName);   
         incomingNote.setPatient(patientName);
         
         // 2. Check if notes document already exists

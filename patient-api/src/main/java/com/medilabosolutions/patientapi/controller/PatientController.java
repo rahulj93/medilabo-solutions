@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medilabosolutions.patientapi.model.Patient;
@@ -31,13 +30,7 @@ public class PatientController {
     public Patient getPatientById(@PathVariable Long id) {
         return patientService.getPatientById(id); 
     }
-
-    @GetMapping("/patient")
-    public Patient getPatient(@RequestParam String lastName, @RequestParam String firstName) {
-        return patientService.getPatient(lastName, firstName);  
-    } 
     
-
     @PostMapping("/patient")
     public Patient createPatient(@RequestBody Patient patient) {
         return patientService.createPatient(patient);
@@ -50,10 +43,6 @@ public class PatientController {
     ) {
         return patientService.updatePatient(id, patient);
     }
-    // @PutMapping("/patient")
-    // public Patient updatePatient(String lastName, String firstName) {
-    //     return patientService.updatePatient(lastName, firstName);  
-    // }
 
     @DeleteMapping("/patient/{id}")
     public void deletePatient(@PathVariable Long id) {
