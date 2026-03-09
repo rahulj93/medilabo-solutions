@@ -81,10 +81,3 @@ public class NotesService {
         return notesRepository.save(incomingNote);
     }
 }
-
-
-// change note field to array type instead of string andd force unique id (patient id)
-
-// actually don't worry about update or delete endpoints. just add a new note
-
-// try to replace _id with patient id and ensure it's unique 
